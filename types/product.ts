@@ -1,0 +1,1 @@
+export type ProductType = { _id: string; name: string; slug: string; category: string; brand: string; price: number; stock: number; image: string; description: string; featured: boolean; published: boolean; specifications: Record<string, string> }

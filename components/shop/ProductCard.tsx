@@ -1,0 +1,10 @@
+import Image from "next/image"
+import Link from "next/link"
+import { ArrowUpRight } from "lucide-react"
+import { AddToCartButton } from "@/components/cart/AddToCartButton"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { formatCurrency } from "@/lib/helpers"
+import { PRODUCT_CATEGORY_LABELS } from "@/lib/constants"
+import type { ProductType } from "@/types/product"
+export function ProductCard({ product }: { product: ProductType }) { return <Card className="group overflow-hidden border-border bg-card pt-0"><Link className="relative block aspect-[4/3] overflow-hidden bg-muted" href={`/shop/${product.slug}`}><Image src={product.image} alt={product.name} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition duration-500 group-hover:scale-105" /></Link><CardHeader><Badge variant="secondary" className="w-fit">{PRODUCT_CATEGORY_LABELS[product.category]}</Badge><CardTitle className="flex items-start justify-between gap-3 text-xl"><Link href={`/shop/${product.slug}`}>{product.name}</Link><ArrowUpRight className="size-5 shrink-0 text-primary" aria-hidden /></CardTitle></CardHeader><CardContent><p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">{product.description}</p></CardContent><CardFooter className="justify-between gap-4"><strong className="text-lg">{formatCurrency(product.price)}</strong><AddToCartButton product={product} /></CardFooter></Card> }
