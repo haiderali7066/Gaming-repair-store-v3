@@ -37,7 +37,7 @@ const heroSlides = [
       { text: "View Services", link: "/repair", primary: false },
     ],
     highlights: ["Expert Technicians", "Quality Parts", "Repair Warranty"],
-    image: "/pc1.png",
+    image: "https://res.cloudinary.com/dvu9vmcqd/image/upload/v1786215929/pc1_uax7vw.png",
   },
   {
     eyebrow: "GAMING LAPTOP REPAIR",
@@ -53,7 +53,7 @@ const heroSlides = [
       "Professional Service",
       "Quality Replacement Parts",
     ],
-    image: "/lp1.png",
+    image: "https://res.cloudinary.com/dvu9vmcqd/image/upload/v1786215936/lp1_zen7mw.png",
   },
   {
     eyebrow: "UPGRADE YOUR SETUP",
@@ -65,7 +65,7 @@ const heroSlides = [
       { text: "Explore Gaming", link: "/shop", primary: false },
     ],
     highlights: ["Gaming PCs", "Gaming Laptops", "Accessories"],
-    image: "/setup2.png",
+    image: "https://res.cloudinary.com/dvu9vmcqd/image/upload/v1786215923/key-m_zhfofl.png",
   },
 ];
 
