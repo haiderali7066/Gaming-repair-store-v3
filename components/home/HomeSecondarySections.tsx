@@ -636,72 +636,7 @@ export function HomeSecondarySections() {
         </div>
       </section>
       {/* 8. SHOP PRODUCTS */}
-      <section className="py-24 md:py-32 bg-slate-50 border-y border-slate-200/60">
-        <div className="container mx-auto px-6 lg:px-12">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeUp}
-            className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6"
-          >
-            <div>
-              <span className="text-violet-600 font-extrabold tracking-widest text-sm uppercase bg-violet-100 px-4 py-1.5 rounded-full">
-                SHOP GAMING
-              </span>
-              <h2 className="text-4xl lg:text-5xl font-black text-slate-900 mt-6">
-                Upgrade Your Setup
-              </h2>
-            </div>
-            <Link href="/shop">
-              <button className="text-violet-700 font-black hover:text-violet-800 flex items-center gap-2 bg-white border-2 border-violet-100 hover:border-violet-300 px-6 py-3.5 rounded-full transition-all shadow-sm hover:shadow-md">
-                View All Products <ArrowRight className="w-5 h-5" />
-              </button>
-            </Link>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {[1, 2, 3, 4].map((item) => (
-              <motion.div
-                key={item}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                className="bg-white rounded-[2rem] p-6 hover:shadow-2xl transition-all duration-300 border border-slate-100 group flex flex-col transform hover:-translate-y-1"
-              >
-                <div className="h-48 md:h-56 bg-slate-50 rounded-[1.5rem] mb-6 overflow-hidden relative flex items-center justify-center">
-                  <img
-                    src={`https://placehold.co/400x300/transparent/64748b?text=Product+${item}`}
-                    alt="Product"
-                    className="max-w-[80%] max-h-[80%] object-contain group-hover:scale-110 transition-transform duration-500 drop-shadow-md"
-                  />
-                  <div className="absolute top-4 left-4 bg-violet-600 text-white text-xs font-black px-3 py-1.5 rounded-lg shadow-md">
-                    -15%
-                  </div>
-                </div>
-                <h3 className="font-bold text-slate-900 text-lg mb-2">
-                  High-End RTX Graphics Card
-                </h3>
-                <p className="text-sm text-slate-500 font-medium mb-6">
-                  16GB VRAM, DLSS 3.0
-                </p>
-                <div className="flex justify-between items-center mt-auto pt-4 border-t border-slate-50">
-                  <span className="font-black text-2xl text-slate-900">
-                    AED 3,499
-                  </span>
-                  <Link href="/shop">
-                    <button className="bg-slate-100 text-slate-900 p-3.5 rounded-xl hover:bg-violet-700 hover:text-white transition-colors shadow-sm">
-                      <ShoppingCart className="w-5 h-5" />
-                    </button>
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-      Featured
+     
       {/* 9. TESTIMONIALS (New) */}
       <section className="py-24 md:py-32 bg-white">
         <div className="container mx-auto px-6 lg:px-12">
