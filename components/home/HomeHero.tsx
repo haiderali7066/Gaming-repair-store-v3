@@ -1,277 +1,263 @@
-"use client"
+"use client";
 
-import { useRef, useEffect } from "react"
-import { motion } from "framer-motion"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-import Link from "next/link"
-import { ChevronDown, Laptop, Gamepad2, Wrench, Zap, ArrowRight, Cpu, Flame } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { fadeInUp, staggerContainer, itemVariants } from "@/lib/home-animations"
+import React, { useState } from "react";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle2, ArrowRight, Clock, Wrench, ShieldCheck } from "lucide-react";
 
-gsap.registerPlugin(ScrollTrigger)
+// 1. Fallback data to prevent undefined errors
+const defaultHeroSlides = [
+   {
+    eyebrow: "GAMING PC SPECIALISTS",
+    heading: "Expert Gaming PC Repairs. Built to Perform.",
+    content:
+      "From hardware faults and overheating to upgrades and performance issues, our technicians diagnose and repair your gaming PC with care.",
+    buttons: [
+      { text: "Book a Repair", link: "/repair", primary: true },
+      { text: "View Services", link: "/repair", primary: false },
+    ],
+    highlights: ["Expert Technicians", "Quality Parts", "Repair Warranty"],
+    image:
+      "https://res.cloudinary.com/dvu9vmcqd/image/upload/v1786215929/pc1_uax7vw.png",
+  },
+  {
+    eyebrow: "GAMING LAPTOP REPAIR",
+    heading: "Get Your Gaming Laptop Back in Action.",
+    content:
+      "Professional repairs for gaming laptops, including display, battery, charging, overheating, motherboard, keyboard and performance issues.",
+    buttons: [
+      { text: "Book a Repair", link: "/repair", primary: true },
+      { text: "Track Repair", link: "/contact", primary: false },
+    ],
+    highlights: [
+      "Fast Diagnostics",
+      "Professional Service",
+      "Quality Replacement Parts",
+    ],
+    image:
+      "https://res.cloudinary.com/dvu9vmcqd/image/upload/v1786215936/lp1_zen7mw.png",
+  },
+  {
+    eyebrow: "UPGRADE YOUR SETUP",
+    heading: "Power Up Your Gaming Experience.",
+    content:
+      "Shop gaming PCs, laptops, components, peripherals and accessories to build or upgrade your ultimate gaming setup.",
+    buttons: [
+      { text: "Shop Products", link: "/shop", primary: true },
+      { text: "Explore Gaming", link: "/shop", primary: false },
+    ],
+    highlights: ["Gaming PCs", "Gaming Laptops", "Accessories"],
+    image:
+      "https://res.cloudinary.com/dvu9vmcqd/image/upload/v1786215923/key-m_zhfofl.png",
+  },
+];
 
-// Hero + services sections of the homepage. Split out from the page so the
-// page itself can stay a Server Component and render the real, database-backed
-// FeaturedProductsSection alongside these animated client sections.
-export function HomeHero() {
-  const heroRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (!heroRef.current) return
 
-    const circles = heroRef.current.querySelectorAll(".float-circle")
-    circles.forEach((circle, index) => {
-      gsap.to(circle, {
-        y: Math.sin(index) * 80,
-        x: Math.cos(index) * 80,
-        duration: 8 + index * 0.5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      })
-    })
+const defaultBrands = [
+  "ASUS ROG",
+  "Alienware",
+  "MSI",
+  "Razer",
+  "Corsair",
+  "Logitech G",
+  "HyperX",
+  "Gigabyte",
+  "Intel",
+  "AMD Ryzen",
+  "NVIDIA",
+];
 
-    gsap.to(heroRef.current.querySelectorAll(".parallax-element"), {
-      scrollTrigger: {
-        trigger: heroRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1,
-      },
-      y: 200,
-    })
-  }, [])
 
-  const scrollToSection = () => {
-    window.scrollBy({ top: window.innerHeight, behavior: "smooth" })
+
+const defaultFadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+export  function HomeHero({ 
+  heroSlides = defaultHeroSlides, 
+  brands = defaultBrands, 
+  fadeUp = defaultFadeUp 
+}: any) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // 2. Safety check: If for some reason heroSlides is explicitly set to null/empty, don't crash
+  if (!heroSlides || heroSlides.length === 0) {
+    return null;
   }
+
+  // Ensure currentSlide is within bounds (in case data changes dynamically)
+  const safeSlideIndex = currentSlide >= heroSlides.length ? 0 : currentSlide;
 
   return (
     <>
-      {/* HERO SECTION */}
-      <section
-        ref={heroRef}
-        className="relative min-h-screen bg-gradient-to-br from-primary/8 via-white to-secondary/5 overflow-hidden flex items-center justify-center pt-20"
-      >
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <motion.div
-            className="float-circle parallax-element absolute top-10 right-20 w-96 h-96 bg-gradient-to-br from-secondary/20 to-transparent rounded-full blur-3xl"
-            animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="float-circle parallax-element absolute bottom-0 left-10 w-80 h-80 bg-gradient-to-tr from-accent/15 to-transparent rounded-full blur-3xl"
-            animate={{ scale: [1.2, 1, 1.2], opacity: [0.4, 0.7, 0.4] }}
-            transition={{ duration: 9, repeat: Infinity, delay: 1, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="float-circle absolute top-1/2 left-1/3 w-60 h-60 bg-gradient-to-br from-cyan-accent/10 to-transparent rounded-full blur-3xl"
-            animate={{ x: [0, 40, 0], y: [0, -40, 0] }}
-            transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </div>
+      {/* 1. HERO SECTION */}
+      <section className="relative w-full min-h-[90vh] flex items-center bg-white overflow-hidden">
+        {/* Tilted Purple Background on Right (Hidden on mobile for text readability, visible md and up) */}
+        <div
+          className="absolute top-0 right-0 h-full w-[60%] lg:w-[50%] bg-gradient-to-bl from-violet-600 to-violet-800 z-0 origin-top-right transition-all duration-700 hidden md:block"
+          style={{ clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0% 100%)" }}
+        />
+        {/* Mobile Background Fallback */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-violet-50 md:hidden z-0" />
 
-        <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center py-20">
-          <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="space-y-8">
-            <motion.div variants={itemVariants} className="space-y-4">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-                className="inline-block"
-              >
-                <span className="text-accent font-bold text-sm uppercase tracking-widest bg-accent/10 px-4 py-2 rounded-full">
-                  Gaming Excellence
-                </span>
-              </motion.div>
-              <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-primary leading-tight">
-                Gaming
-                <br />
-                <span className="relative">
-                  <span className="text-secondary">Laptop</span>
-                  <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-accent to-cyan-accent rounded-full"></span>
-                </span>
-                <br />
-                & PC Experts
+        <div className="container mx-auto px-6 lg:px-12 grid md:grid-cols-2 gap-12 items-center h-full relative z-10 py-24 md:py-0">
+          <AnimatePresence mode="wait">
+            {/* Left Content */}
+            <motion.div
+              key={`content-${safeSlideIndex}`}
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 30 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="max-w-xl z-10 text-center md:text-left"
+            >
+              <span className="inline-block py-1.5 px-4 rounded-full bg-violet-100 text-violet-700 font-bold tracking-wider text-xs uppercase mb-6 shadow-sm">
+                {heroSlides[safeSlideIndex].eyebrow}
+              </span>
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-black leading-[1.1] text-slate-900 mb-6 tracking-tight">
+                {heroSlides[safeSlideIndex].heading}
               </h1>
-            </motion.div>
+              <p className="text-lg text-slate-600 mb-10 leading-relaxed max-w-lg mx-auto md:mx-0 font-medium">
+                {heroSlides[safeSlideIndex].content}
+              </p>
 
-            <motion.p variants={itemVariants} className="text-xl text-foreground/70 max-w-lg leading-relaxed">
-              Expert repairs, performance upgrades, and cutting-edge gaming systems. Trade in your old device and
-              level up with Al Dana Gaming.
-            </motion.p>
+              <div className="flex flex-col sm:flex-row flex-wrap gap-4 mb-10 justify-center md:justify-start">
+                {heroSlides[safeSlideIndex].buttons?.[0] && (
+                  <Link href={heroSlides[safeSlideIndex].buttons[0].link}>
+                    <button className="w-full sm:w-auto bg-violet-700 hover:bg-violet-800 text-white px-8 py-4 rounded-full font-bold transition-all shadow-xl shadow-violet-500/30 flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                      {heroSlides[safeSlideIndex].buttons[0].text}
+                    </button>
+                  </Link>
+                )}
+                {heroSlides[safeSlideIndex].buttons?.[1] && (
+                  <Link href={heroSlides[safeSlideIndex].buttons[1].link}>
+                    <button className="w-full sm:w-auto bg-white hover:bg-slate-50 text-slate-900 px-8 py-4 rounded-full font-bold transition-all flex items-center justify-center gap-2 border-2 border-slate-200 transform hover:-translate-y-1 shadow-sm">
+                      {heroSlides[safeSlideIndex].buttons[1].text}{" "}
+                      <ArrowRight className="w-5 h-5 text-violet-600" />
+                    </button>
+                  </Link>
+                )}
+              </div>
 
-            <motion.div variants={itemVariants} className="flex flex-wrap gap-4 pt-4">
-              <Button
-                render={<Link href="/repair-booking" />}
-                className="bg-gradient-to-r from-accent to-orange-500 hover:from-accent/90 hover:to-orange-600 text-white px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
-              >
-                Book a Repair <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-              <Button
-                render={<Link href="/shop" />}
-                variant="outline"
-                className="border-2 border-primary text-primary hover:bg-primary/10 px-8 py-6 text-lg font-semibold"
-              >
-                Shop New Systems
-              </Button>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="grid grid-cols-3 gap-6 pt-8">
-              {[
-                { value: "5000+", label: "Happy Gamers" },
-                { value: "24-48h", label: "Quick Fixes" },
-                { value: "2 Yrs", label: "Warranty" },
-              ].map((stat, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + i * 0.1 }}
-                >
-                  <p className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                    {stat.value}
-                  </p>
-                  <p className="text-sm text-muted-foreground">{stat.label}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, rotateY: 20 }}
-            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="relative h-full flex items-center justify-center"
-            style={{ perspective: "1000px" }}
-          >
-            <div className="relative w-full max-w-md">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 bg-gradient-to-r from-accent via-secondary to-cyan-accent rounded-3xl blur-2xl opacity-30"
-              />
-
-              <motion.div
-                animate={{ y: [0, -20, 0] }}
-                transition={{ duration: 5, repeat: Infinity }}
-                className="relative bg-gradient-to-br from-white to-slate-light rounded-3xl p-8 shadow-2xl border-2 border-white/50"
-              >
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-2xl font-bold text-primary">Gaming PC</h3>
-                    <motion.div
-                      animate={{ rotate: [0, 360] }}
-                      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                    >
-                      <Cpu className="w-8 h-8 text-accent" />
-                    </motion.div>
-                  </div>
-
-                  <div className="space-y-3">
-                    {["GPU", "CPU", "RAM"].map((item, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ width: 0 }}
-                        whileInView={{ width: "100%" }}
-                        transition={{ delay: i * 0.2, duration: 0.8 }}
-                      >
-                        <div className="flex justify-between mb-1">
-                          <span className="text-sm font-semibold text-foreground">{item}</span>
-                          <span className="text-sm text-accent font-bold">100%</span>
-                        </div>
-                        <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <motion.div
-                            className={`h-full rounded-full ${i === 0 ? "bg-gradient-to-r from-accent to-orange-500" : i === 1 ? "bg-gradient-to-r from-secondary to-primary" : "bg-gradient-to-r from-cyan-accent to-secondary"}`}
-                            initial={{ width: 0 }}
-                            whileInView={{ width: "100%" }}
-                            transition={{ delay: i * 0.2 + 0.3, duration: 1 }}
-                          />
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  <motion.div
-                    animate={{ boxShadow: ["0 0 0 0 rgba(255, 107, 53, 0.7)", "0 0 0 10px rgba(255, 107, 53, 0)"] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="flex items-center gap-2 text-accent font-semibold"
+              <div className="flex flex-wrap gap-x-6 gap-y-3 items-center justify-center md:justify-start text-sm font-bold text-slate-700">
+                {heroSlides[safeSlideIndex].highlights?.map((highlight: string, idx: number) => (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-2 bg-slate-50 md:bg-transparent px-3 py-1 md:p-0 rounded-full"
                   >
-                    <Flame className="w-5 h-5" />
-                    Peak Performance Ready
-                  </motion.div>
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
+                    <CheckCircle2 className="w-5 h-5 text-violet-600" />
+                    <span>{highlight}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          <AnimatePresence mode="wait">
+            {/* Right Visual (Transparent PNG) */}
+            <motion.div
+              key={`image-${safeSlideIndex}`}
+              initial={{ opacity: 0, scale: 0.9, rotate: -5 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              exit={{ opacity: 0, scale: 1.1, rotate: 5 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="relative h-[300px] md:h-[500px] lg:h-[650px] w-full flex items-center justify-center drop-shadow-2xl z-10"
+            >
+              <img
+                src={heroSlides[safeSlideIndex].image}
+                alt="Gaming Device"
+                className="max-w-full max-h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+              />
+            </motion.div>
+          </AnimatePresence>
         </div>
 
+        {/* Slider Controls */}
+        <div className="absolute bottom-6 md:bottom-10 left-1/2 md:left-12 -translate-x-1/2 md:translate-x-0 flex gap-3 z-20">
+          {heroSlides.map((_: any, idx: number) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentSlide(idx)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                idx === safeSlideIndex ? "bg-violet-700 w-10" : "bg-slate-300 md:bg-slate-300/50 w-3 hover:bg-violet-400"
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* 2. BRANDS MARQUEE */}
+      <section className="bg-slate-900 py-6 overflow-hidden border-y border-slate-800">
+        <div className="flex w-[200%] md:w-max">
+          <motion.div
+            className="flex items-center gap-12 md:gap-24 px-6 md:px-12 w-1/2 justify-around"
+            animate={{ x: [0, "-100%"] }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
+          >
+            {[...brands, ...brands].map((brand: string, idx: number) => (
+              <span
+                key={idx}
+                className="text-slate-400 font-black text-xl md:text-2xl uppercase tracking-widest whitespace-nowrap opacity-50 hover:opacity-100 hover:text-white transition-opacity cursor-default"
+              >
+                {brand}
+              </span>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      
+
+      {/* 3. SERVICE HIGHLIGHTS */}
+      <section className="container mx-auto px-6 -mt-8 relative z-30">
         <motion.div
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer"
-          animate={{ y: [0, 12, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity }}
-          onClick={scrollToSection}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeUp}
+          className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] p-6 md:p-8 flex flex-col md:flex-row flex-wrap lg:flex-nowrap justify-between gap-6 md:gap-8 items-start md:items-center border border-slate-100"
         >
-          <ChevronDown className="w-8 h-8 text-primary" />
+          <div className="w-full lg:w-auto text-slate-500 font-black uppercase tracking-widest text-xs">
+            Why Customers Choose Us
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-violet-50 rounded-xl">
+              <Clock className="w-6 h-6 text-violet-600" />
+            </div>
+            <div>
+              <h4 className="font-extrabold text-slate-900">Fast Turnaround</h4>
+              <p className="text-sm text-slate-500 font-medium">
+                Get your device back sooner
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-violet-50 rounded-xl">
+              <Wrench className="w-6 h-6 text-violet-600" />
+            </div>
+            <div>
+              <h4 className="font-extrabold text-slate-900">Expert Technicians</h4>
+              <p className="text-sm text-slate-500 font-medium">
+                Skilled hardware specialists
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-violet-50 rounded-xl">
+              <ShieldCheck className="w-6 h-6 text-violet-600" />
+            </div>
+            <div>
+              <h4 className="font-extrabold text-slate-900">Quality Parts</h4>
+              <p className="text-sm text-slate-500 font-medium">
+                Reliable replacement components
+              </p>
+            </div>
+          </div>
         </motion.div>
       </section>
-
-      {/* SERVICES SECTION */}
-      <section className="py-24 bg-gradient-to-b from-white via-slate-light to-white">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            variants={fadeInUp}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="text-center mb-20"
-          >
-            <span className="text-accent font-bold text-sm uppercase tracking-widest bg-accent/10 px-4 py-2 rounded-full inline-block mb-4">
-              Our Expertise
-            </span>
-            <h2 className="text-5xl md:text-6xl font-bold text-primary mb-6">Gaming Device Specialists</h2>
-            <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
-              Specialized repairs and upgrades for gaming laptops and high-performance PCs
-            </p>
-          </motion.div>
-
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            {[
-              { icon: Laptop, label: "Gaming Laptops", color: "from-secondary to-primary" },
-              { icon: Gamepad2, label: "Gaming PCs", color: "from-accent to-orange-500" },
-              { icon: Zap, label: "Performance Upgrades", color: "from-cyan-accent to-secondary" },
-              { icon: Wrench, label: "Component Repair", color: "from-primary to-cyan-accent" },
-            ].map((item, idx) => {
-              const Icon = item.icon
-              return (
-                <motion.div
-                  key={idx}
-                  variants={itemVariants}
-                  whileHover={{ y: -12, scale: 1.08 }}
-                  className={`bg-gradient-to-br ${item.color} p-0.5 rounded-2xl group cursor-pointer`}
-                >
-                  <div className="bg-white rounded-2xl p-8 text-center h-full transition-all duration-300 group-hover:bg-slate-light">
-                    <div
-                      className={`w-16 h-16 bg-gradient-to-br ${item.color} rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg`}
-                    >
-                      <Icon className="w-8 h-8 text-white" />
-                    </div>
-                    <p className="font-bold text-foreground text-lg">{item.label}</p>
-                  </div>
-                </motion.div>
-              )
-            })}
-          </motion.div>
-        </div>
-      </section>
     </>
-  )
+  );
 }
