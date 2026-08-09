@@ -114,7 +114,7 @@ export default async function RepairsPage() {
                       </TableCell>
                       <TableCell className="text-sm">{formatDate(repair.createdAt)}</TableCell>
                       <TableCell className="text-right">
-                        <Link href={`/admin/(protected)/repairs/${repair._id}`}>
+                        <Link href={`/admin/repairs/${repair._id}`}>
                           <Button variant="outline" size="sm">
                             View
                           </Button>

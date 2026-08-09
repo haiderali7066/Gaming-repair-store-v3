@@ -108,6 +108,27 @@ export async function updateStatus(formData: FormData) {
   revalidatePath(`/admin/${kind === "order" ? "orders" : kind === "repair" ? "repairs" : "buy-back"}/${id}`)
 }
 
+export async function setBuybackOffer(formData: FormData) {
+  await guard()
+  const id = String(formData.get("id") || "")
+  if (!id) return { ok: false, error: "Missing request id." }
+  const offeredPrice = Math.max(0, Number(formData.get("offeredPrice")))
+  if (!Number.isFinite(offeredPrice) || offeredPrice <= 0) {
+    return { ok: false, error: "Enter a valid offer amount." }
+  }
+  try {
+    // Quoting an offer also moves the request to "quoted" so its status
+    // reflects that the customer now has a price to review.
+    await BuyBackRequest.findByIdAndUpdate(id, { offeredPrice, status: "quoted" })
+  } catch (err) {
+    console.error("[v0] setBuybackOffer error:", err)
+    return { ok: false, error: "Failed to save offer. Please try again." }
+  }
+  revalidatePath("/admin/buy-back")
+  revalidatePath(`/admin/buy-back/${id}`)
+  return { ok: true }
+}
+
 export async function updateStock(formData: FormData) {
   await guard()
   const id = String(formData.get("id"))

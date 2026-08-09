@@ -125,7 +125,7 @@ export default async function BuyBackPage() {
                       </TableCell>
                       <TableCell className="text-sm">{formatDate(buyback.createdAt)}</TableCell>
                       <TableCell className="text-right">
-                        <Link href={`/admin/(protected)/buy-back/${buyback._id}`}>
+                        <Link href={`/admin/buy-back/${buyback._id}`}>
                           <Button variant="outline" size="sm">
                             View
                           </Button>
